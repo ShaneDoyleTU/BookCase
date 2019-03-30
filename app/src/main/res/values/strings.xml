@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">BookCase</string>
+
+    <string-array name="books">
+        <item>Tale of Two Cities</item>
+        <item>War and Peace</item>
+        <item>Lord of the Rings</item>
+        <item>Gilgamesh</item>
+        <item>The Odyssey</item>
+        <item>IT</item>
+        <item>The Prince</item>
+        <item>Dune</item>
+        <item>To Kill a Mocking Bird</item>
+        <item>Pride and Prejudice</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
