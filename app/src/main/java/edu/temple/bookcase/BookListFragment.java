@@ -3,6 +3,7 @@ package edu.temple.bookcase;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +27,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class BookListFragment extends Fragment {
+public class BookListFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -70,6 +71,33 @@ public class BookListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        /*ArrayList<String> titles = new ArrayList<>();
+        titles.add("A Tale of Two Cities");
+        titles.add("War and Peace");
+        titles.add("Lord of the Rings");
+        titles.add("Gilgamesh");
+        titles.add("The Odyssey");
+        titles.add("IT");
+        titles.add("The Prince");
+        titles.add("Dune");
+        titles.add("To Kill a Mockingbird");
+        titles.add("Pride and Prejudice");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1,titles);
+        //ListView list = (ListView) view.findViewById(R.id.list);
+        //list.setAdapter(adapter);
+        setListAdapter(adapter);
+        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String title = parent.getItemAtPosition(position).toString();
+                listener.titleSend(title);
+            }
+        });
+        getListView().setOnItemClickListener(this);*/
+        return view;
+    }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         ArrayList<String> titles = new ArrayList<>();
         titles.add("A Tale of Two Cities");
         titles.add("War and Peace");
@@ -81,17 +109,23 @@ public class BookListFragment extends Fragment {
         titles.add("Dune");
         titles.add("To Kill a Mockingbird");
         titles.add("Pride and Prejudice");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,titles);
-        ListView list = (ListView) view.findViewById(R.id.list);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1,titles);
+        //ListView list = (ListView) view.findViewById(R.id.list);
+        //list.setAdapter(adapter);
+        setListAdapter(adapter);
+        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String title = parent.getItemAtPosition(position).toString();
                 listener.titleSend(title);
             }
-        });
-        return view;
+        });*/
+        getListView().setOnItemClickListener(this);
+    }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+        String title = parent.getItemAtPosition(position).toString();
+        listener.titleSend(title);
     }
 
 
