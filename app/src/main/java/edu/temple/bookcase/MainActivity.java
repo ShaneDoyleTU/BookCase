@@ -10,13 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
-
-
+    private BookListFragment fragmentA;
+    private BookDetailsFragment fragmentB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<String> titles = new ArrayList<>();
+        /*ArrayList<String> titles = new ArrayList<>();
         titles.add("A Tale of Two Cities");
         titles.add("War and Peace");
         titles.add("Lord of the Rings");
@@ -26,10 +26,26 @@ public class MainActivity extends AppCompatActivity {
         titles.add("The Prince");
         titles.add("Dune");
         titles.add("To Kill a Mockingbird");
-        titles.add("Pride and Prejudice");
-        ViewPager viewPager = findViewById(R.id.pager);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),titles);
+        titles.add("Pride and Prejudice");*/
+        fragmentA = new BookListFragment();
+        fragmentB = new BookDetailsFragment();
+        if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
+                heightPixels) {
+            ViewPager viewPager = findViewById(R.id.pager);
+            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            viewPager.setAdapter(adapter);
+        }
+        else{
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment3, fragmentA)
+                    .replace(R.id.fragment2, fragmentB)
+                    .commit();
+        }
         //BookDetailsFragment fragment = BookDetailsFragment.newInstance(titles.get(1));
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment).commit();
+    }
+
+    public void titleSend(String title){
+        fragmentB.displayBook(title);
     }
 }

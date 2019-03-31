@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class BookDetailsFragment extends Fragment {
@@ -24,16 +25,26 @@ public class BookDetailsFragment extends Fragment {
         return fragment;
     }
 
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_book_details,container,false);
         TextView title = v.findViewById(R.id.detailTitle);
-        if(getArguments()!=null){
-            bookTitle = getArguments().getString(ARG_BOOK);
+        if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
+                heightPixels) {
+            if (getArguments() != null) {
+                bookTitle = getArguments().getString(ARG_BOOK);
+
+            }
         }
         title.setText(bookTitle);
+
         return v;
+    }
+    public void displayBook(String title){
+        bookTitle = title;
     }
 
 

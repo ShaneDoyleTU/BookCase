@@ -9,10 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import edu.temple.bookcase.dummy.DummyContent;
 import edu.temple.bookcase.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +33,12 @@ public class BookListFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    private BookListListener listener;
+
+    public interface BookListListener{
+        void titleSend(String title);
+    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -59,32 +70,41 @@ public class BookListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        ArrayList<String> titles = new ArrayList<>();
+        titles.add("A Tale of Two Cities");
+        titles.add("War and Peace");
+        titles.add("Lord of the Rings");
+        titles.add("Gilgamesh");
+        titles.add("The Odyssey");
+        titles.add("IT");
+        titles.add("The Prince");
+        titles.add("Dune");
+        titles.add("To Kill a Mockingbird");
+        titles.add("Pride and Prejudice");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,titles);
+        ListView list = (ListView) view.findViewById(R.id.list);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String title = parent.getItemAtPosition(position).toString();
+                listener.titleSend(title);
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+        });
         return view;
     }
 
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof BookListListener) {
+            listener = (BookListListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
-    }
+    }*/
 
     @Override
     public void onDetach() {
