@@ -98,7 +98,7 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
     }
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ArrayList<String> titles = new ArrayList<>();
+        /*ArrayList<String> titles = new ArrayList<>();
         titles.add("A Tale of Two Cities");
         titles.add("War and Peace");
         titles.add("Lord of the Rings");
@@ -109,7 +109,9 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
         titles.add("Dune");
         titles.add("To Kill a Mockingbird");
         titles.add("Pride and Prejudice");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1,titles);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1,titles);*/
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.books, android.R.layout.simple_list_item_1);
         //ListView list = (ListView) view.findViewById(R.id.list);
         //list.setAdapter(adapter);
         setListAdapter(adapter);
@@ -129,16 +131,18 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
     }
 
 
-    /*@Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof BookListListener) {
             listener = (BookListListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement BookListListener");
         }
-    }*/
+        //listener = (BookListListener) context;
+    }
 
     @Override
     public void onDetach() {

@@ -8,7 +8,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BookListFragment.BookListListener {
 
     private BookListFragment fragmentA;
     private BookDetailsFragment fragmentB;
@@ -29,11 +29,18 @@ public class MainActivity extends AppCompatActivity {
         titles.add("Pride and Prejudice");*/
         fragmentA = new BookListFragment();
         fragmentB = new BookDetailsFragment();
+
         if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
                 heightPixels) {
             ViewPager viewPager = findViewById(R.id.pager);
             ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPager.setAdapter(adapter);
+        }
+        else if(getResources().getDisplayMetrics().widthPixels>=600){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment3, fragmentA)
+                    .replace(R.id.fragment2, fragmentB)
+                    .commit();
         }
         else{
             getSupportFragmentManager().beginTransaction()

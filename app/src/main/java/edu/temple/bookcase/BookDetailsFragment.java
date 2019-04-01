@@ -15,7 +15,11 @@ public class BookDetailsFragment extends Fragment {
 
     private static final String ARG_BOOK = "argBook";
 
+
+
     private String bookTitle;
+
+    public View view;
 
     public static BookDetailsFragment newInstance(String book) {
         BookDetailsFragment fragment = new BookDetailsFragment();
@@ -31,20 +35,24 @@ public class BookDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_book_details,container,false);
+        view = v;
         TextView title = v.findViewById(R.id.detailTitle);
         if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
                 heightPixels) {
             if (getArguments() != null) {
                 bookTitle = getArguments().getString(ARG_BOOK);
-
+                title.setText(bookTitle);
             }
         }
+
         title.setText(bookTitle);
 
         return v;
     }
     public void displayBook(String title){
         bookTitle = title;
+        TextView titleView = view.findViewById(R.id.detailTitle);
+        titleView.setText(title);
     }
 
 
