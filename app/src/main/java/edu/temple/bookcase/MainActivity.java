@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPager.setAdapter(adapter);
             new JSONTask().execute(URL_TO_HIT);
+            //myBooks = new JSONTask().doInBackground(URL_TO_HIT);
         }
         else if(getResources().getDisplayMetrics().widthPixels>=600){
             getSupportFragmentManager().beginTransaction()
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     public class JSONTask extends AsyncTask<String,String,List<Book>> {
 
         @Override
-        protected List<Book> doInBackground(String... params) {
+        protected ArrayList<Book> doInBackground(String... params) {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             try {
@@ -87,15 +89,16 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 }
 
                 String finalJson = buffer.toString();
-                JSONObject parentObject = new JSONObject(finalJson);
-                JSONArray parentArray = parentObject.getJSONArray("movies");
+                //JSONObject parentObject = new JSONObject(finalJson);
+                JSONArray parentArray = new JSONArray(finalJson);
 
-                List<Book> bookList = new ArrayList<>();
+                ArrayList<Book> bookList = new ArrayList<>();
                 for(int i=0; i<parentArray.length(); i++) {
                     JSONObject finalObject = parentArray.getJSONObject(i);
                     Book book = new Book();
                     book.setAuthor(finalObject.getString("author"));
-                    
+
+                    //Toast.makeText(MainActivity.this, book.getAuthor(), Toast.LENGTH_SHORT).show();
                     book.setBookTitle(finalObject.getString("title"));
                     book.setCoverURL(finalObject.getString("cover_url"));
                     book.setBookId(finalObject.getInt("book_id"));
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             }
             return null;
         }
+
     }
 
     public void titleSend(String title){
