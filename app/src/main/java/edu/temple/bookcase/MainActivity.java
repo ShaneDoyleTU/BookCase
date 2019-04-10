@@ -1,10 +1,12 @@
 package edu.temple.bookcase;
 
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -27,11 +29,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     private BookListFragment fragmentA;
     private BookDetailsFragment fragmentB;
     private final String URL_TO_HIT = "https://kamorris.com/lab/audlib/booksearch.php";
+    ArrayList<Book> myBooks = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<Book> myBooks = new ArrayList<>();
+        //ArrayList<Book> myBooks = new ArrayList<>();
         /*ArrayList<String> titles = new ArrayList<>();
         titles.add("A Tale of Two Cities");
         titles.add("War and Peace");
@@ -48,10 +51,13 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
                 heightPixels) {
-            ViewPager viewPager = findViewById(R.id.pager);
-            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-            viewPager.setAdapter(adapter);
             new JSONTask().execute(URL_TO_HIT);
+            /*ViewPager viewPager = findViewById(R.id.pager);
+            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            adapter.setBooks(myBooks);
+            viewPager.setAdapter(adapter);*/
+
+            //new JSONTask().doInBackground(URL_TO_HIT);
             //myBooks = new JSONTask().doInBackground(URL_TO_HIT);
         }
         else if(getResources().getDisplayMetrics().widthPixels>=600){
@@ -66,9 +72,19 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     .replace(R.id.fragment2, fragmentB)
                     .commit();
         }
+
         //BookDetailsFragment fragment = BookDetailsFragment.newInstance(titles.get(1));
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment).commit();
     }
+
+    public void setBooks(ArrayList<Book> list){
+        myBooks = list;
+
+        //Looper.prepare();
+        //Toast.makeText(this,myBooks.get(0).getAuthor(),Toast.LENGTH_LONG);
+    }
+
+
 
     public class JSONTask extends AsyncTask<String,String,List<Book>> {
 
@@ -108,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
 
                 }
+                setBooks(bookList);
                 return bookList;
 
             } catch (MalformedURLException e) {
@@ -129,6 +146,30 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 }
             }
             return null;
+        }
+        @Override
+        protected void onPostExecute(final List<Book> result) {
+            super.onPostExecute(result);
+            /*dialog.dismiss();
+            if(result != null) {
+                MovieAdapter adapter = new MovieAdapter(getApplicationContext(), R.layout.row, result);
+                lvMovies.setAdapter(adapter);
+                lvMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {  // list item click opens a new detailed activity
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        MovieModel movieModel = result.get(position); // getting the model
+                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                        intent.putExtra("movieModel", new Gson().toJson(movieModel)); // converting model json into string type and sending it via intent
+                        startActivity(intent);
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }*/
+            ViewPager viewPager = findViewById(R.id.pager);
+            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            adapter.setBooks(myBooks);
+            viewPager.setAdapter(adapter);
         }
 
     }

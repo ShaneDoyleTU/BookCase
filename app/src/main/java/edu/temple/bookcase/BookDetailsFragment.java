@@ -18,13 +18,15 @@ public class BookDetailsFragment extends Fragment {
 
 
     private String bookTitle;
+    private String bookAuthor;
+    private String bookPub;
 
     public View view;
 
-    public static BookDetailsFragment newInstance(String book) {
+    public static BookDetailsFragment newInstance(Book book) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_BOOK,book);
+        args.putParcelable(ARG_BOOK,book);
         fragment.setArguments(args);
         return fragment;
     }
@@ -37,11 +39,19 @@ public class BookDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_book_details,container,false);
         view = v;
         TextView title = v.findViewById(R.id.detailTitle);
+        TextView author = v.findViewById(R.id.detailAuthor);
+        TextView published = v.findViewById(R.id.detailPub);
         if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
                 heightPixels) {
             if (getArguments() != null) {
-                bookTitle = getArguments().getString(ARG_BOOK);
+                Book book = getArguments().getParcelable(ARG_BOOK);
+                bookTitle = book.getBookTitle();
+                bookAuthor = book.getAuthor();
+                int pub = book.getPublished();
+                bookPub = String.format("%d",pub);
                 title.setText(bookTitle);
+                author.setText(bookAuthor);
+                published.setText(bookPub);
             }
         }
 

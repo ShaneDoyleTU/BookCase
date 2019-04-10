@@ -13,7 +13,8 @@ import java.util.ArrayList;
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     //public ArrayList<String> titleList;
 
-    public ArrayList<String> setUp(){
+    public ArrayList<Book> books = new ArrayList<>();
+    /*public ArrayList<String> setUp(){
         ArrayList<String> titles = new ArrayList<>();
         titles.add("A Tale of Two Cities");
         titles.add("War and Peace");
@@ -26,6 +27,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         titles.add("To Kill a Mockingbird");
         titles.add("Pride and Prejudice");
         return titles;
+    }*/
+    public void setBooks(ArrayList<Book> books){
+        this.books = books;
+
     }
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -34,7 +39,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        ArrayList<String> titles = setUp();
+        ArrayList<Book> titles = books;
 
         BookDetailsFragment frag = BookDetailsFragment.newInstance(titles.get(i));
 
