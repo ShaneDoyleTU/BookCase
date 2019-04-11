@@ -61,16 +61,18 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             //myBooks = new JSONTask().doInBackground(URL_TO_HIT);
         }
         else if(getResources().getDisplayMetrics().widthPixels>=600){
-            getSupportFragmentManager().beginTransaction()
+            /*getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment3, fragmentA)
                     .replace(R.id.fragment2, fragmentB)
-                    .commit();
+                    .commit();*/
+            new JSONTask().execute(URL_TO_HIT);
         }
         else{
-            getSupportFragmentManager().beginTransaction()
+            /*getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment3, fragmentA)
                     .replace(R.id.fragment2, fragmentB)
-                    .commit();
+                    .commit();*/
+            new JSONTask().execute(URL_TO_HIT);
         }
 
         //BookDetailsFragment fragment = BookDetailsFragment.newInstance(titles.get(1));
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
                 }
                 setBooks(bookList);
+                fragmentA.setBooks(bookList);
                 return bookList;
 
             } catch (MalformedURLException e) {
@@ -166,15 +169,24 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             } else {
                 Toast.makeText(getApplicationContext(), "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }*/
-            ViewPager viewPager = findViewById(R.id.pager);
-            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-            adapter.setBooks(myBooks);
-            viewPager.setAdapter(adapter);
+            if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
+                    heightPixels) {
+                ViewPager viewPager = findViewById(R.id.pager);
+                ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                adapter.setBooks(myBooks);
+                viewPager.setAdapter(adapter);
+            }
+            else{
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment3, fragmentA)
+                        .replace(R.id.fragment2, fragmentB)
+                        .commit();
+            }
         }
 
     }
 
-    public void titleSend(String title){
+    public void titleSend(Book title){
         fragmentB.displayBook(title);
     }
 }

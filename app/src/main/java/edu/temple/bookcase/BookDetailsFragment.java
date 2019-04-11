@@ -16,7 +16,7 @@ public class BookDetailsFragment extends Fragment {
     private static final String ARG_BOOK = "argBook";
 
 
-
+    //private Book book;
     private String bookTitle;
     private String bookAuthor;
     private String bookPub;
@@ -59,10 +59,18 @@ public class BookDetailsFragment extends Fragment {
 
         return v;
     }
-    public void displayBook(String title){
-        bookTitle = title;
+    public void displayBook(Book title){
+        bookTitle = title.getBookTitle();
+        bookAuthor = title.getAuthor();
+        int pub = title.getPublished();
+        bookPub = String.format("%d",pub);
         TextView titleView = view.findViewById(R.id.detailTitle);
-        titleView.setText(title);
+        TextView authorView = view.findViewById(R.id.detailAuthor);
+        TextView pubView = view.findViewById(R.id.detailPub);
+        titleView.setText(bookTitle);
+        authorView.setText(bookAuthor);
+        pubView.setText(bookPub);
+
     }
 
 

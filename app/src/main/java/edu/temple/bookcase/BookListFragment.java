@@ -28,7 +28,8 @@ import java.util.List;
  * interface.
  */
 public class BookListFragment extends ListFragment implements AdapterView.OnItemClickListener {
-
+    public ArrayList<Book> books = new ArrayList<>();
+    public ArrayList<String> names = new ArrayList<>();
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -38,7 +39,7 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
     private BookListListener listener;
 
     public interface BookListListener{
-        void titleSend(String title);
+        void titleSend(Book title);
     }
 
     /**
@@ -109,9 +110,11 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
         titles.add("Dune");
         titles.add("To Kill a Mockingbird");
         titles.add("Pride and Prejudice");
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1,titles);*/
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.books, android.R.layout.simple_list_item_1);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,names);
+        //ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(),
+                //R.array.books, android.R.layout.simple_list_item_1);
         //ListView list = (ListView) view.findViewById(R.id.list);
         //list.setAdapter(adapter);
         setListAdapter(adapter);
@@ -126,8 +129,9 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-        String title = parent.getItemAtPosition(position).toString();
-        listener.titleSend(title);
+        //String title = parent.getItemAtPosition(position).toString();
+        Book book = books.get(position);
+        listener.titleSend(book);
     }
 
 
@@ -163,5 +167,13 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(DummyItem item);
+    }
+
+    public void setBooks(ArrayList<Book> books){
+        this.books = books;
+        int i;
+        for(i = 0; i<books.size();i++){
+            names.add(books.get(i).getBookTitle());
+        }
     }
 }
