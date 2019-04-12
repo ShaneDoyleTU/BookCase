@@ -7,8 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 
 public class BookDetailsFragment extends Fragment {
@@ -20,6 +23,7 @@ public class BookDetailsFragment extends Fragment {
     private String bookTitle;
     private String bookAuthor;
     private String bookPub;
+    private String coverURL;
 
     public View view;
 
@@ -41,6 +45,7 @@ public class BookDetailsFragment extends Fragment {
         TextView title = v.findViewById(R.id.detailTitle);
         TextView author = v.findViewById(R.id.detailAuthor);
         TextView published = v.findViewById(R.id.detailPub);
+        ImageView cover = v.findViewById(R.id.cover);
         if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
                 heightPixels) {
             if (getArguments() != null) {
@@ -49,9 +54,11 @@ public class BookDetailsFragment extends Fragment {
                 bookAuthor = book.getAuthor();
                 int pub = book.getPublished();
                 bookPub = String.format("%d",pub);
+                coverURL = book.getCoverURL();
                 title.setText(bookTitle);
                 author.setText(bookAuthor);
                 published.setText(bookPub);
+                Picasso.with(getActivity()).load(coverURL).into(cover);
             }
         }
 
@@ -64,12 +71,15 @@ public class BookDetailsFragment extends Fragment {
         bookAuthor = title.getAuthor();
         int pub = title.getPublished();
         bookPub = String.format("%d",pub);
+        coverURL = title.getCoverURL();
+        ImageView cover = view.findViewById(R.id.cover);
         TextView titleView = view.findViewById(R.id.detailTitle);
         TextView authorView = view.findViewById(R.id.detailAuthor);
         TextView pubView = view.findViewById(R.id.detailPub);
         titleView.setText(bookTitle);
         authorView.setText(bookAuthor);
         pubView.setText(bookPub);
+        Picasso.with(getActivity()).load(coverURL).into(cover);
 
     }
 

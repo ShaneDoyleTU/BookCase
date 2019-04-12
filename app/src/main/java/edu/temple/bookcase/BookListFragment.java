@@ -172,8 +172,10 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
     public void setBooks(ArrayList<Book> books){
         this.books = books;
         int i;
+        ArrayList<String> bookNames = new ArrayList<>();
         for(i = 0; i<books.size();i++){
-            names.add(books.get(i).getBookTitle());
+            bookNames.add(books.get(i).getBookTitle());
         }
+        names = bookNames;
     }
 }

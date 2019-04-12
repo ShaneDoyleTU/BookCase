@@ -6,7 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -29,11 +32,14 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     private BookListFragment fragmentA;
     private BookDetailsFragment fragmentB;
     private final String URL_TO_HIT = "https://kamorris.com/lab/audlib/booksearch.php";
+    protected Button searchButton;
     ArrayList<Book> myBooks = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //EditText search = (EditText) findViewById(R.id.editText);
         //ArrayList<Book> myBooks = new ArrayList<>();
         /*ArrayList<String> titles = new ArrayList<>();
         titles.add("A Tale of Two Cities");
@@ -48,6 +54,17 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         titles.add("Pride and Prejudice");*/
         fragmentA = new BookListFragment();
         fragmentB = new BookDetailsFragment();
+        searchButton = (Button) findViewById(R.id.button);
+        //EditText search = (EditText) findViewById(R.id.editText);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText search = (EditText) findViewById(R.id.editText);
+                //search.requestFocus();
+                String input = search.getText().toString().trim();
+                new JSONTask().execute("https://kamorris.com/lab/audlib/booksearch.php?search="+input);
+            }
+        });
 
         if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
                 heightPixels) {
@@ -74,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     .commit();*/
             new JSONTask().execute(URL_TO_HIT);
         }
+
 
         //BookDetailsFragment fragment = BookDetailsFragment.newInstance(titles.get(1));
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment).commit();
