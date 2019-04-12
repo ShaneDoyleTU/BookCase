@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             @Override
             public void onClick(View v) {
                 EditText search = (EditText) findViewById(R.id.editText);
-                //search.requestFocus();
+                
                 String input = search.getText().toString().trim();
                 new JSONTask().execute("https://kamorris.com/lab/audlib/booksearch.php?search="+input);
             }
