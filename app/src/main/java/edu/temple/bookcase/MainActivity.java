@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     private BookDetailsFragment fragmentB;
     private final String URL_TO_HIT = "https://kamorris.com/lab/audlib/booksearch.php";
     protected Button searchButton;
+    private boolean searched;
+
     ArrayList<Book> myBooks = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +57,14 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         fragmentA = new BookListFragment();
         fragmentB = new BookDetailsFragment();
         searchButton = (Button) findViewById(R.id.button);
-        //EditText search = (EditText) findViewById(R.id.editText);
+        final EditText search = (EditText) findViewById(R.id.editText);
+        search.requestFocus();
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText search = (EditText) findViewById(R.id.editText);
-                
+                //EditText search = (EditText) findViewById(R.id.editText);
+                setSearched();
                 String input = search.getText().toString().trim();
                 new JSONTask().execute("https://kamorris.com/lab/audlib/booksearch.php?search="+input);
             }
@@ -102,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         //Looper.prepare();
         //Toast.makeText(this,myBooks.get(0).getAuthor(),Toast.LENGTH_LONG);
+    }
+    public void setSearched(){
+        searched = true;
     }
 
 
@@ -195,6 +202,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 viewPager.setAdapter(adapter);
             }
             else{
+                if(searched){
+                    searched = false;
+                    fragmentA.setAdapter();
+                }
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment3, fragmentA)
                         .replace(R.id.fragment2, fragmentB)

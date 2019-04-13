@@ -126,6 +126,12 @@ public class BookListFragment extends ListFragment implements AdapterView.OnItem
             }
         });*/
         getListView().setOnItemClickListener(this);
+
+    }
+    public void setAdapter(){
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,names);
+        setListAdapter(adapter);
+        getListView().setOnItemClickListener(this);
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
