@@ -30,7 +30,7 @@ import java.util.List;
 
 import edu.temple.audiobookplayer.AudiobookService;
 
-//import static android.support.v4.media.session.MediaControllerCompatApi21.TransportControls.play;
+
 
 public class MainActivity extends AppCompatActivity implements BookListFragment.BookListListener {
 
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     private final String URL_TO_HIT = "https://kamorris.com/lab/audlib/booksearch.php";
     protected Button searchButton;
     private boolean searched;
+    AudiobookService.MediaControlBinder binder;
+    //public AudiobookService service;
 
     ArrayList<Book> myBooks = new ArrayList<>();
     @Override
@@ -226,6 +228,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     }
 
     public void bookPlay(int id){
-        //AudiobookService.play(id);
+        binder.play(id);
     }
 }

@@ -25,12 +25,13 @@ public class BookDetailsFragment extends Fragment {
     private String bookAuthor;
     private String bookPub;
     private String coverURL;
+    private int id;
     protected Button play;
     private playListener listener;
     public View view;
 
     public interface playListener{
-
+        void bookPlay(int id);
     }
 
     public static BookDetailsFragment newInstance(Book book) {
@@ -56,6 +57,7 @@ public class BookDetailsFragment extends Fragment {
                 heightPixels) {
             if (getArguments() != null) {
                 Book book = getArguments().getParcelable(ARG_BOOK);
+                id = book.getBookId();
                 bookTitle = book.getBookTitle();
                 bookAuthor = book.getAuthor();
                 int pub = book.getPublished();
@@ -74,7 +76,8 @@ public class BookDetailsFragment extends Fragment {
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //id = 1;
+                listener.bookPlay(1);
             }
         });
 
@@ -83,6 +86,7 @@ public class BookDetailsFragment extends Fragment {
     public void displayBook(Book title){
         bookTitle = title.getBookTitle();
         bookAuthor = title.getAuthor();
+        id = title.getBookId();
         int pub = title.getPublished();
         bookPub = String.format("%d",pub);
         coverURL = title.getCoverURL();
