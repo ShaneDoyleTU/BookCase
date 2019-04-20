@@ -1,6 +1,7 @@
 package edu.temple.bookcase;
 
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -32,14 +33,15 @@ import edu.temple.audiobookplayer.AudiobookService;
 
 
 
-public class MainActivity extends AppCompatActivity implements BookListFragment.BookListListener {
+public class MainActivity extends AppCompatActivity implements BookListFragment.BookListListener, BookDetailsFragment.PlayListener {
 
     private BookListFragment fragmentA;
     private BookDetailsFragment fragmentB;
     private final String URL_TO_HIT = "https://kamorris.com/lab/audlib/booksearch.php";
     protected Button searchButton;
     private boolean searched;
-    AudiobookService.MediaControlBinder binder;
+    public AudiobookService.MediaControlBinder binder;
+    private Handler handler = new Handler();
     //public AudiobookService service;
 
     ArrayList<Book> myBooks = new ArrayList<>();
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //binder = new AudiobookService.MediaControlBinder();
         //EditText search = (EditText) findViewById(R.id.editText);
         //ArrayList<Book> myBooks = new ArrayList<>();
         /*ArrayList<String> titles = new ArrayList<>();
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         searchButton = (Button) findViewById(R.id.button);
         final EditText search = (EditText) findViewById(R.id.editText);
         search.requestFocus();
+
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     }
 
     public void bookPlay(int id){
+
         binder.play(id);
     }
 }

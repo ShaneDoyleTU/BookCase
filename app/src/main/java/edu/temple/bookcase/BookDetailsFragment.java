@@ -27,10 +27,10 @@ public class BookDetailsFragment extends Fragment {
     private String coverURL;
     private int id;
     protected Button play;
-    private playListener listener;
+    private PlayListener listener;
     public View view;
 
-    public interface playListener{
+    public interface PlayListener{
         void bookPlay(int id);
     }
 
@@ -49,6 +49,7 @@ public class BookDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_book_details,container,false);
         view = v;
+
         TextView title = v.findViewById(R.id.detailTitle);
         TextView author = v.findViewById(R.id.detailAuthor);
         TextView published = v.findViewById(R.id.detailPub);
@@ -77,7 +78,7 @@ public class BookDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //id = 1;
-                listener.bookPlay(1);
+                listener.bookPlay(id);
             }
         });
 
