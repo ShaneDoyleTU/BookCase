@@ -27,6 +27,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import edu.temple.audiobookplayer.AudiobookService;
+
+//import static android.support.v4.media.session.MediaControllerCompatApi21.TransportControls.play;
+
 public class MainActivity extends AppCompatActivity implements BookListFragment.BookListListener {
 
     private BookListFragment fragmentA;
@@ -146,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     book.setCoverURL(finalObject.getString("cover_url"));
                     book.setBookId(finalObject.getInt("book_id"));
                     book.setPublished(finalObject.getInt("published"));
+                    book.setDuration(finalObject.getInt("duration"));
                     bookList.add(book);
 
 
@@ -217,5 +223,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     public void titleSend(Book title){
         fragmentB.displayBook(title);
+    }
+
+    public void bookPlay(int id){
+        //AudiobookService.play(id);
     }
 }

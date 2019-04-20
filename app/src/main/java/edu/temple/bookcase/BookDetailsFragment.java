@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,8 +25,13 @@ public class BookDetailsFragment extends Fragment {
     private String bookAuthor;
     private String bookPub;
     private String coverURL;
-
+    protected Button play;
+    private playListener listener;
     public View view;
+
+    public interface playListener{
+
+    }
 
     public static BookDetailsFragment newInstance(Book book) {
         BookDetailsFragment fragment = new BookDetailsFragment();
@@ -63,6 +69,14 @@ public class BookDetailsFragment extends Fragment {
         }
 
         title.setText(bookTitle);
+
+        play = (Button) v.findViewById(R.id.button2);
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         return v;
     }
