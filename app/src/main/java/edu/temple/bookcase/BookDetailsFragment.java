@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +27,19 @@ public class BookDetailsFragment extends Fragment {
     private String bookPub;
     private String coverURL;
     private int id;
+    private int duration;
     protected Button play;
+    protected Button pause;
+    protected Button stop;
+    protected SeekBar seek;
     private PlayListener listener;
     public View view;
 
     public interface PlayListener{
         void bookPlay(int id);
+        void bookPause();
+        void bookStop();
+        void bookSeek(int progress);
     }
 
     public static BookDetailsFragment newInstance(Book book) {
@@ -59,6 +67,7 @@ public class BookDetailsFragment extends Fragment {
             if (getArguments() != null) {
                 Book book = getArguments().getParcelable(ARG_BOOK);
                 id = book.getBookId();
+                duration = book.getDuration();
                 bookTitle = book.getBookTitle();
                 bookAuthor = book.getAuthor();
                 int pub = book.getPublished();
@@ -81,6 +90,39 @@ public class BookDetailsFragment extends Fragment {
                 listener.bookPlay(id);
             }
         });
+        pause = (Button) v.findViewById(R.id.button3);
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.bookPause();
+            }
+        });
+        stop = (Button) v.findViewById(R.id.button4);
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.bookStop();
+            }
+        });
+        seek = (SeekBar) v.findViewById(R.id.seekBar);
+        seek.setMax(duration);
+        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                listener.bookSeek(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
 
         return v;
     }
@@ -88,6 +130,7 @@ public class BookDetailsFragment extends Fragment {
         bookTitle = title.getBookTitle();
         bookAuthor = title.getAuthor();
         id = title.getBookId();
+        duration = title.getDuration();
         int pub = title.getPublished();
         bookPub = String.format("%d",pub);
         coverURL = title.getCoverURL();
@@ -100,6 +143,19 @@ public class BookDetailsFragment extends Fragment {
         pubView.setText(bookPub);
         Picasso.with(getActivity()).load(coverURL).into(cover);
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof PlayListener) {
+            listener = (PlayListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement PlayListener");
+        }
+        //listener = (BookListListener) context;
     }
 
 

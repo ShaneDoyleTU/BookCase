@@ -1,7 +1,12 @@
 package edu.temple.bookcase;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -41,14 +46,47 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     protected Button searchButton;
     private boolean searched;
     public AudiobookService.MediaControlBinder binder;
-    private Handler handler = new Handler();
+    //private Handler handler = new Handler();
     //public AudiobookService service;
 
     ArrayList<Book> myBooks = new ArrayList<>();
+
+    AudiobookService audioService;
+    boolean connected;
+
+    ServiceConnection myConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            binder = (AudiobookService.MediaControlBinder) service;
+            //audioService = binder.getService();
+            connected = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            connected = false;
+        }
+    };
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        Intent serviceIntent = new Intent(this, AudiobookService.class);
+        bindService(serviceIntent, myConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        unbindService(myConnection);
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //binder = new AudiobookService.MediaControlBinder();
         //EditText search = (EditText) findViewById(R.id.editText);
@@ -232,7 +270,16 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     }
 
     public void bookPlay(int id){
-
+        //Toast.makeText(this,"AHHHHHHH",Toast.LENGTH_LONG);
         binder.play(id);
+    }
+    public void bookPause(){
+        binder.pause();
+    }
+    public void bookStop(){
+        binder.stop();
+    }
+    public void bookSeek(int progress){
+        binder.seekTo(progress);
     }
 }
