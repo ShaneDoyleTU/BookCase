@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,7 +47,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     protected Button searchButton;
     private boolean searched;
     public AudiobookService.MediaControlBinder binder;
-    //private Handler handler = new Handler();
+    private Handler handler = new Handler();
+    private int id;
     //public AudiobookService service;
 
     ArrayList<Book> myBooks = new ArrayList<>();
@@ -87,8 +89,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //binder.setProgressHandler(handler);
 
-        //binder = new AudiobookService.MediaControlBinder();
+        //Message msg = handler.obtainMessage();
+        //String msg1 = msg.toString();
+
         //EditText search = (EditText) findViewById(R.id.editText);
         //ArrayList<Book> myBooks = new ArrayList<>();
         /*ArrayList<String> titles = new ArrayList<>();
@@ -102,8 +107,19 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         titles.add("Dune");
         titles.add("To Kill a Mockingbird");
         titles.add("Pride and Prejudice");*/
+        /*Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                String m = String.valueOf(msg.what);
+                int j = Integer.parseInt(m);
+                fragmentB.setSeek(j);
+                return false;
+            }
+        });*/
+
         fragmentA = new BookListFragment();
         fragmentB = new BookDetailsFragment();
+        //binder.setProgressHandler(handler);
         searchButton = (Button) findViewById(R.id.button);
         final EditText search = (EditText) findViewById(R.id.editText);
         search.requestFocus();
@@ -122,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
                 heightPixels) {
             new JSONTask().execute(URL_TO_HIT);
+            //fragmentB.setHandler(handler);
             /*ViewPager viewPager = findViewById(R.id.pager);
             ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
             adapter.setBooks(myBooks);
@@ -250,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
                 adapter.setBooks(myBooks);
                 viewPager.setAdapter(adapter);
+
             }
             else{
                 if(searched){
@@ -282,4 +300,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     public void bookSeek(int progress){
         binder.seekTo(progress);
     }
+    public void setId(int id){
+        this.id = id;
+    }
+    public int sendId(){
+        return id;
+    }
+
 }

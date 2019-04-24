@@ -43,6 +43,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         BookDetailsFragment frag = BookDetailsFragment.newInstance(titles.get(i));
 
+        //frag.setSeek();
+
 
 
 

@@ -3,6 +3,7 @@ package edu.temple.bookcase;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,13 +34,20 @@ public class BookDetailsFragment extends Fragment {
     protected Button stop;
     protected SeekBar seek;
     private PlayListener listener;
+    //private TextView title;
+    //private TextView author;
+    //private TextView publish;
+    //private TextView identification;
     public View view;
+    //private Handler handler;
 
     public interface PlayListener{
         void bookPlay(int id);
         void bookPause();
         void bookStop();
         void bookSeek(int progress);
+        void setId(int id);
+        int sendId();
     }
 
     public static BookDetailsFragment newInstance(Book book) {
@@ -58,6 +66,7 @@ public class BookDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_book_details,container,false);
         view = v;
 
+        //identification = v.findViewById(R.id.identification);
         TextView title = v.findViewById(R.id.detailTitle);
         TextView author = v.findViewById(R.id.detailAuthor);
         TextView published = v.findViewById(R.id.detailPub);
@@ -67,6 +76,8 @@ public class BookDetailsFragment extends Fragment {
             if (getArguments() != null) {
                 Book book = getArguments().getParcelable(ARG_BOOK);
                 id = book.getBookId();
+                //listener.setId(book.getBookId());
+                //String id1 = String.format("%d",id);
                 duration = book.getDuration();
                 bookTitle = book.getBookTitle();
                 bookAuthor = book.getAuthor();
@@ -76,18 +87,26 @@ public class BookDetailsFragment extends Fragment {
                 title.setText(bookTitle);
                 author.setText(bookAuthor);
                 published.setText(bookPub);
+                //identification.setText(id1);
                 Picasso.with(getActivity()).load(coverURL).into(cover);
+
             }
         }
 
-        title.setText(bookTitle);
+        //title.setText(bookTitle);
 
         play = (Button) v.findViewById(R.id.button2);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //id = 1;
-                listener.bookPlay(id);
+                if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
+                        heightPixels) {
+                    listener.bookPlay(id);
+                }
+                else {
+                    listener.bookPlay(listener.sendId());
+                }
             }
         });
         pause = (Button) v.findViewById(R.id.button3);
@@ -129,11 +148,54 @@ public class BookDetailsFragment extends Fragment {
     public void displayBook(Book title){
         bookTitle = title.getBookTitle();
         bookAuthor = title.getAuthor();
-        id = title.getBookId();
+        //id = title.getBookId();
+        listener.setId(title.getBookId());
+        //String id1 = String.format("%d",id);
         duration = title.getDuration();
         int pub = title.getPublished();
         bookPub = String.format("%d",pub);
         coverURL = title.getCoverURL();
+        /*play = (Button) view.findViewById(R.id.button2);
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //id = 1;
+                listener.bookPlay(id);
+            }
+        });
+        pause = (Button) view.findViewById(R.id.button3);
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.bookPause();
+            }
+        });
+        stop = (Button) view.findViewById(R.id.button4);
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.bookStop();
+            }
+        });
+        seek = (SeekBar) view.findViewById(R.id.seekBar);
+        seek.setMax(duration);
+        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                listener.bookSeek(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });*/
+        //identification = view.findViewById(R.id.identification);
         ImageView cover = view.findViewById(R.id.cover);
         TextView titleView = view.findViewById(R.id.detailTitle);
         TextView authorView = view.findViewById(R.id.detailAuthor);
@@ -141,6 +203,7 @@ public class BookDetailsFragment extends Fragment {
         titleView.setText(bookTitle);
         authorView.setText(bookAuthor);
         pubView.setText(bookPub);
+        //identification.setText(id1);
         Picasso.with(getActivity()).load(coverURL).into(cover);
 
     }
@@ -157,6 +220,11 @@ public class BookDetailsFragment extends Fragment {
         }
         //listener = (BookListListener) context;
     }
+
+    public void setSeek(int progress){
+        seek.setProgress(progress);
+    }
+
 
 
     /**
