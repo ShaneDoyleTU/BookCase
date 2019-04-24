@@ -93,32 +93,32 @@
         android:id="@+id/button3"
         android:layout_width="44dp"
         android:layout_height="33dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="9dp"
         android:text="@string/pause"
         android:textSize="5sp"
-        app:layout_constraintStart_toEndOf="@+id/button2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
     <Button
         android:id="@+id/button4"
         android:layout_width="42dp"
         android:layout_height="33dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="7dp"
         android:text="@string/stop"
         android:textSize="6sp"
-        app:layout_constraintStart_toEndOf="@+id/button3"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="182dp"
         android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="26dp"
-        app:layout_constraintStart_toEndOf="@+id/button4"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="7dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailPub" />
 
     <TextView
         android:id="@+id/identification"

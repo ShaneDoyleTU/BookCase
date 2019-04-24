@@ -203,6 +203,7 @@ public class BookDetailsFragment extends Fragment {
         titleView.setText(bookTitle);
         authorView.setText(bookAuthor);
         pubView.setText(bookPub);
+        seek.setMax(duration);
         //identification.setText(id1);
         Picasso.with(getActivity()).load(coverURL).into(cover);
 
