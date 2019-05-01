@@ -1,9 +1,12 @@
 package edu.temple.bookcase;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,14 +26,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     public AudiobookService.MediaControlBinder binder;
     private Handler handler = new Handler();
     private int id;
+    long queueid;
+    DownloadManager dm;
     //public AudiobookService service;
 
     ArrayList<Book> myBooks = new ArrayList<>();
@@ -84,10 +94,20 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     }
 
+    /*@Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putBoolean("searched",searched);
+        outState.putString("URL_TO_HIT",URL_TO_HIT);
+    }*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*if(savedInstanceState!=null){
+            //searched=savedInstanceState.getBoolean("searched");
+        }*/
 
         //binder.setProgressHandler(handler);
 
@@ -123,6 +143,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         searchButton = (Button) findViewById(R.id.button);
         final EditText search = (EditText) findViewById(R.id.editText);
         search.requestFocus();
+        /*if(searched){
+            String input = search.getText().toString().trim();
+            URL_TO_HIT = "https://kamorris.com/lab/audlib/booksearch.php?search="+input;
+        }*/
 
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 setSearched();
                 String input = search.getText().toString().trim();
                 new JSONTask().execute("https://kamorris.com/lab/audlib/booksearch.php?search="+input);
+                //URL_TO_HIT = "https://kamorris.com/lab/audlib/booksearch.php?search="+input;
             }
         });
 
@@ -289,7 +314,13 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     public void bookPlay(int id){
         //Toast.makeText(this,"AHHHHHHH",Toast.LENGTH_LONG);
-        binder.play(id);
+        File file = new File("/sdcard/somewhere/"+id+".mp3");
+        if(file.exists()){
+            binder.play(file);
+        }
+        else {
+            binder.play(id);
+        }
     }
     public void bookPause(){
         binder.pause();
@@ -306,5 +337,47 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     public int sendId(){
         return id;
     }
+    public void download(int id){
+        /*dm= (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse("https://kamorris.com/lab/audlib/download.php?id="+String.format("%d",id)));
+        queueid = dm.enqueue(request);
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                DownloadManager.Query q = new DownloadManager.Query();
+                q.setFilterById(queueid);
+            }
+        };*/
+        new DownloadFile().execute("https://kamorris.com/lab/audlib/download.php?id="+String.format("%d",id),String.format("%d",id));
+    }
+    private class DownloadFile extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String...url) {
+            int count;
+            try {
+                URL url1 = new URL(url[0]);
+                URLConnection conexion = url1.openConnection();
+                conexion.connect();
+                int lenghtOfFile = conexion.getContentLength();
+                InputStream input = new BufferedInputStream(url1.openStream());
+                OutputStream output = new FileOutputStream("/sdcard/somewhere/"+url[1]+".mp3");
 
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    publishProgress((int) (total * 100 / lenghtOfFile));
+                    output.write(data, 0, count);
+                }
+
+                output.flush();
+                output.close();
+                input.close();
+            } catch (Exception e) {
+            }
+            return null;
+        }
+    }
 }

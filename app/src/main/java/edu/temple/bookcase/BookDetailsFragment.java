@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 
 public class BookDetailsFragment extends Fragment {
 
@@ -33,6 +35,7 @@ public class BookDetailsFragment extends Fragment {
     protected Button pause;
     protected Button stop;
     protected SeekBar seek;
+    protected Button download;
     private PlayListener listener;
     //private TextView title;
     //private TextView author;
@@ -48,6 +51,7 @@ public class BookDetailsFragment extends Fragment {
         void bookSeek(int progress);
         void setId(int id);
         int sendId();
+        void download(int id);
     }
 
     public static BookDetailsFragment newInstance(Book book) {
@@ -63,6 +67,7 @@ public class BookDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_book_details,container,false);
         view = v;
 
@@ -141,7 +146,41 @@ public class BookDetailsFragment extends Fragment {
 
             }
         });
+        download = (Button) v.findViewById(R.id.button5);
+        File file = new File("/sdcard/somewhere/"+id+".mp3");
+        if(file.exists()){
+            download.setText("Delete");
+        }
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                if(getResources().getDisplayMetrics().widthPixels<getResources().getDisplayMetrics().
+                        heightPixels) {
+                    File file = new File("/sdcard/somewhere/"+id+".mp3");
+                    if(file.exists()){
+                        file.delete();
+                        download.setText("Download");
+                    }
+                    else {
+                        listener.download(id);
+                        download.setText("Delete");
+                    }
+                }
+                else {
+                    File file = new File("/sdcard/somewhere/"+listener.sendId()+".mp3");
+                    if(file.exists()){
+                        file.delete();
+                        download.setText("Download");
+                    }
+                    else {
+                        listener.download(listener.sendId());
+                        download.setText("Delete");
+                    }
+                }
+
+            }
+        });
 
         return v;
     }

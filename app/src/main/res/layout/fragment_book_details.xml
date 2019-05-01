@@ -129,4 +129,15 @@
         app:layout_constraintStart_toEndOf="@+id/detailPub"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="62dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="8dp"
+        android:text="Download"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button4"
+        android:textSize="6sp"/>
+
 </android.support.constraint.ConstraintLayout>
